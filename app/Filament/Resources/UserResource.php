@@ -35,6 +35,7 @@ class UserResource extends Resource
                 ->email()
                 ->maxlength(255)
                 ->unique(ignoreRecord: true)
+                ->autocomplete(false)
                 ->required(),
 
                 DateTimePicker::make('email_verified_at')
@@ -43,8 +44,8 @@ class UserResource extends Resource
 
                 TextInput::make('password')
                     ->password()
-                ->autocomplete('new-password')
-                ->required(),
+                    ->dehydrated(fn ($state) => filled($state))
+                    ->required(fn ($operation): bool => $operation == 'create'),
             ]);
 
 
